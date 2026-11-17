@@ -2,12 +2,13 @@ manifest:
   remotes:
     - name: zmkfirmware
       url-base: https://github.com/zmkfirmware
-    - name: ZitaoTech
-      url-base: https://github.com/ZitaoTech
   projects:
     - name: zmk
-      remote: ZitaoTech
-      revision: bbkeyboard_tp
+      remote: zmkfirmware
+      # ZMK v0.3.0: the first release line that ships ZMK Studio, built on the
+      # same Zephyr 3.5 that the old ZitaoTech fork pinned, so the legacy board
+      # definition in boards/arm/bb9900 keeps working.
+      revision: v0.3.0
       import: app/west.yml
   self:
     path: config

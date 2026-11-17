@@ -1,0 +1,91 @@
+# SPDX-License-Identifier: MIT
+
+rsource "drivers/input/Kconfig"
+
+DT_CHOSEN_CAPSLOCK_INDICATOR := zitaotech,capslock-indicator
+DT_CHOSEN_LAYER_INDICATOR := zitaotech,layer-indicator
+
+menuconfig ZMK_INDICATOR_CAPSLOCK
+    bool "Caps Lock / trackpad indicator LED"
+    default $(dt_chosen_enabled,$(DT_CHOSEN_CAPSLOCK_INDICATOR))
+    select LED
+    select LED_PWM
+    select ZMK_HID_INDICATORS
+    help
+      Drives the trackpad backlight. On the stock uConsole firmware this light
+      doubles as the Caps Lock indicator, so it is lit while the host reports
+      Caps Lock as on. This is kept for compatibility with the stock behaviour.
+
+if ZMK_INDICATOR_CAPSLOCK
+
+config ZMK_INDICATOR_CAPSLOCK_BRT
+    int "Brightness while lit, in percent"
+    range 1 100
+    default 100
+
+endif # ZMK_INDICATOR_CAPSLOCK
+
+menuconfig ZMK_INDICATOR_LED
+    bool "Layer indicator LED"
+    default $(dt_chosen_enabled,$(DT_CHOSEN_LAYER_INDICATOR))
+    select LED
+    select LED_PWM
+    help
+      Uses the big-button backlight as a layer indicator: off on the base layer,
+      steady on layer 1, breathing on layer 2 and blinking on layer 3 and above.
+
+if ZMK_INDICATOR_LED
+
+config ZMK_IDICATOR_LAYER_BRT
+    int "Brightness on layer 1, in percent"
+    range 1 100
+    default 100
+
+config ZMK_IDICATOR_LAYER_CYCLE_MAXBRT
+    int "Maximum brightness of the breathing and blinking effects, in percent"
+    range 1 100
+    default 100
+
+config ZMK_IDICATOR_LAYER_CYCLE_MINBRT
+    int "Minimum brightness of the breathing and blinking effects, in percent"
+    range 0 100
+    default 20
+
+config ZMK_IDICATOR_LAYER_CYCLE_INTERVAL
+    int "Milliseconds between breathing steps"
+    default 20
+
+config ZMK_IDICATOR_BRT_STEP
+    int "Brightness change per breathing step, in percent"
+    range 1 100
+    default 5
+
+config ZMK_IDICATOR_BLINK_INTERVAL
+    int "Milliseconds between blink toggles"
+    default 300
+
+config ZMK_IDICATOR_ON_START
+    bool "Start with the layer indicator lit"
+    default n
+
+endif # ZMK_INDICATOR_LED
+
+config ZMK_TRACKPAD_SCROLL_MODE
+    bool "Trackpad scroll mode driven by the host LED state"
+    default y if DT_HAS_ZITAOTECH_INPUT_PROCESSOR_SCROLL_MODE_ENABLED
+    depends on ZMK_POINTING
+    depends on ZMK_HID_INDICATORS
+    help
+      Keeps the stock uConsole behaviour where the trackpad scrolls instead of
+      moving the pointer while the host reports Caps Lock or Scroll Lock on.
+
+if ZMK_TRACKPAD_SCROLL_MODE
+
+config ZMK_TRACKPAD_SCROLL_DIVISOR
+    int "Trackpad scroll divisor"
+    range 1 128
+    default 16
+    help
+      Higher values scroll more slowly. 16 approximates the stock firmware.
+
+endif # ZMK_TRACKPAD_SCROLL_MODE

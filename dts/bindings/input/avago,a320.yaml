@@ -1,0 +1,72 @@
+# SPDX-License-Identifier: MIT
+
+description: |
+  Avago ADBS-A320 optical finger navigation sensor, as used for the BlackBerry 9900 trackpad.
+  Reports relative X/Y motion through the Zephyr input subsystem.
+
+compatible: "avago,a320"
+
+include: i2c-device.yaml
+
+properties:
+  polling-interval-ms:
+    type: int
+    default: 10
+    description: How often to poll the motion register while the finger is not moving.
+  motion-polling-interval-ms:
+    type: int
+    default: 4
+    description: |
+      How often to poll while the finger is moving. The sensor produces a new sample about
+      every 6 ms, so polling much faster than this gains nothing.
+  motion-timeout-ms:
+    type: int
+    default: 100
+    description: How long after the last motion to keep polling at the motion rate.
+  idle-polling-interval-ms:
+    type: int
+    default: 25
+    description: |
+      How often to poll once the finger has been still for idle-timeout-ms. The first movement
+      after a pause can lag by up to this much.
+  idle-timeout-ms:
+    type: int
+    default: 1000
+    description: How long without motion before dropping to the idle polling rate.
+  ext-power:
+    type: phandle
+    description: |
+      External power control that supplies the sensor. Used to power cycle the sensor when it
+      stops responding, which also turns it back on if it was left off.
+  speed-switching:
+    type: boolean
+    description: |
+      Let the sensor switch resolution with finger speed (250 to 1000 CPI), which acts as
+      built-in pointer acceleration. Off from reset; the datasheet power-up sequence enables it.
+  high-cpi:
+    type: boolean
+    description: Allow speed switching to reach 1250 CPI instead of 1000 CPI.
+  speed-check-interval-ms:
+    type: int
+    default: 8
+    enum: [4, 8, 12, 16]
+    description: How often the sensor re-evaluates finger speed for speed switching.
+  speed-thresholds:
+    type: uint8-array
+    description: |
+      Speed switching thresholds, written to OFN_Speed_ST12 through OFN_Speed_ST54 in this order:
+      ST12 ST21 ST23 ST32 ST34 ST43 ST45 ST54. Each value is inches per second times 8.
+      Leave unset to keep the sensor defaults.
+  liftoff-shutter-threshold:
+    type: int
+    default: 0
+    description: |
+      Drop small motion samples whose shutter value is above this, unless they continue a fast
+      stroke in the same direction. The shutter time rises as the finger lifts off, and those last
+      samples cause the cursor to twitch. 0 disables the filter.
+  assert-deassert:
+    type: boolean
+    description: Gate motion on image quality, to reject noise when the finger lifts.
+  finger-detect:
+    type: boolean
+    description: Only report motion while a finger is on the sensor.

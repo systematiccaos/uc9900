@@ -1,0 +1,18 @@
+# SPDX-License-Identifier: MIT
+
+description: |
+  Trackpad scroll mode. While the host reports Caps Lock or Scroll Lock as on,
+  relative X/Y motion is converted into horizontal/vertical wheel events, like
+  the stock uConsole firmware. Otherwise events pass through unchanged.
+
+compatible: "zitaotech,input-processor-scroll-mode"
+
+include: ip_zero_param.yaml
+
+properties:
+  divisor:
+    type: int
+    default: 16
+    description: |
+      Number of sensor counts per wheel notch. Higher values scroll more
+      slowly. 16 approximates the stock firmware's middle scroll speed.
