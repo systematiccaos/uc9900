@@ -1,5 +1,5 @@
-identifier: bb9900
-name: bb9900
+identifier: bb9900/nrf52840/zmk
+name: uConsole 9900
 type: mcu
 arch: arm
 toolchain:

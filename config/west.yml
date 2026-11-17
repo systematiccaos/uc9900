@@ -2,12 +2,13 @@ manifest:
   remotes:
     - name: zmkfirmware
       url-base: https://github.com/zmkfirmware
-    - name: ZitaoTech
-      url-base: https://github.com/ZitaoTech
   projects:
     - name: zmk
-      remote: ZitaoTech
-      revision: bbkeyboard_tp
+      remote: zmkfirmware
+      # ZMK main, pinned to the commit this board module is tested against.
+      # Bump this commit to pick up new ZMK releases; the board and drivers in
+      # this repo are written against the Zephyr 4.1 / HWMv2 generation.
+      revision: 4dd95d7840eb3d5a3f59bb29fbf1ab054715ef85
       import: app/west.yml
   self:
     path: config

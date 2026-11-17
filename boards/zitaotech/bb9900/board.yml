@@ -1,0 +1,11 @@
+# Copyright (c) 2023 ZitaoTech
+# SPDX-License-Identifier: MIT
+
+board:
+  name: bb9900
+  full_name: uConsole 9900 USB/BLE Keyboard
+  vendor: zitaotech
+  socs:
+    - name: nrf52840
+      variants:
+        - name: zmk

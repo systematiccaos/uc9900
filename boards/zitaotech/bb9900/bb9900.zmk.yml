@@ -1,10 +1,13 @@
 file_format: "1"
-id: bb9900
-name: uConsole9900
+id: bb9900//zmk
+name: uConsole 9900
 type: board
 arch: arm
 features:
   - keys
+  - pointer
+  - backlight
+  - studio
 outputs:
   - usb
   - ble

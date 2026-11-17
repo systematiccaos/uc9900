@@ -12,4 +12,7 @@
 #     shield: reviung41
 ---
 include:
-  - board: bb9900
+  # ZMK Studio enabled firmware. Unlock it from the keyboard before connecting.
+  - board: bb9900//zmk
+    snippet: studio-rpc-usb-uart
+    cmake-args: -DCONFIG_ZMK_STUDIO=y
